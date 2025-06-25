@@ -8,16 +8,16 @@ namespace Player.PlayerUI
         [SerializeField] private Image energyBar;
         [SerializeField] public float maxEnergy;
         [SerializeField] public float currentEnergy;
-        [SerializeField] private PlayerController playerController;
+        [SerializeField] private CarController carController;
         void Start()
         {
-            maxEnergy = playerController.maxMoveSpeed;
+            maxEnergy = carController.maxMoveSpeed;
         }
 
         void Update()
         {
             energyBar.fillAmount = currentEnergy / maxEnergy;
-            if (currentEnergy < playerController.minMoveSpeed)
+            if (currentEnergy < carController.minMoveSpeed)
             {
                 currentEnergy -= Time.deltaTime;
             }

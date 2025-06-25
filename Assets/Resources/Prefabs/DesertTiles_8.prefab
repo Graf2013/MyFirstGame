@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -5574501669638697997}
   - component: {fileID: -3882567609072000267}
   - component: {fileID: 4861981757114871922}
-  - component: {fileID: -4467747370982396859}
+  - component: {fileID: -6201241936437711667}
   m_Layer: 0
   m_Name: DesertTiles_8
   m_TagString: Obstacle
@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.1731415, y: -2.65825, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -150,7 +150,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1000000
+  m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -164,7 +164,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!114 &-3882567609072000267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +177,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f29b9251d4f8d447988b61b75059511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawner: {fileID: 0}
+  zone:
+    zoneName: 
+    zoneCenter: {fileID: 0}
+    zoneArea: {fileID: 0}
+    maxEnemies: 10
+    worldObjectsInZone: 10
+    enemies: []
+    worldObjects: []
+    respawnDelay: 10
+    playerDistanceThreshold: 20
   breakEffectPrefab: {fileID: 0}
   breakEffect: {fileID: 7270706525982067590, guid: e8cfdc99b4c30bf41a3e1e1b3af6d79a, type: 3}
   maxHealth: 100
@@ -200,56 +211,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 1.5, z: 0}
   scale: {x: 4, y: 3, z: 1}
---- !u!114 &-4467747370982396859
-MonoBehaviour:
+--- !u!208 &-6201241936437711667
+NavMeshObstacle:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7207822230432495545}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShadowGroup: 0
-  m_Priority: 0
-  m_ComponentVersion: 5
-  m_HasRenderer: 0
-  m_UseRendererSilhouette: 1
-  m_CastsShadows: 1
-  m_SelfShadows: 0
-  m_AlphaCutoff: 0.1
-  m_ApplyToSortingLayers: bd0c595ec59696ab00000000
-  m_ShapePath:
-  - {x: -0.25, y: -0.42187494, z: 0}
-  - {x: -0.25, y: 0.421875, z: 0}
-  - {x: 0.25, y: 0.421875, z: 0}
-  - {x: 0.25, y: -0.42187494, z: 0}
-  m_ShapePathHash: 0
-  m_InstanceId: 0
-  m_ShadowShape2DComponent: {fileID: 2912137350945385910}
-  m_ShadowShape2DProvider:
-    rid: 874079065741984054
-  m_ShadowCastingSource: 2
-  m_ShadowMesh:
-    m_Mesh: {fileID: 0}
-    m_LocalBounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.1499939, y: 0.3218689, z: 0}
-    m_EdgeProcessing: 1
-    m_TrimEdge: 0.1
-    m_FlipX: 0
-    m_FlipY: 0
-    m_InitialTrim: 0.1
-  m_CastingOption: 1
-  m_PreviousTrimEdge: 0
-  m_PreviousEdgeProcessing: -1
-  m_PreviousShadowCastingSource: -1
-  m_PreviousShadowShape2DSource: {fileID: 0}
-  references:
-    version: 2
-    RefIds:
-    - rid: 874079065741984054
-      type: {class: ShadowShape2DProvider_SpriteRenderer, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
-      data: 
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.25, y: 0.42200002, z: 0.1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

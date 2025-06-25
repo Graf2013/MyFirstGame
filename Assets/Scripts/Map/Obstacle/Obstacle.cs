@@ -1,11 +1,14 @@
+using GameMamager;
 using UI;
 using UnityEngine;
 using VFX;
 
 namespace Map.Obstacle
 {
-    class Obstacle : MonoBehaviour
+    public class Obstacle : MonoBehaviour
     {
+        public WorldSpawner spawner;
+        public WorldSpawner.Zone zone; 
         [SerializeField] private ParticleSystem breakEffectPrefab;
         [SerializeField] private GameObject breakEffect;
         [SerializeField] public float maxHealth;
@@ -17,11 +20,9 @@ namespace Map.Obstacle
         private ExplosionCactusFragment _explosionCactusFragment;
         private Transform _obstacleHealthBar;
 
-
         private GameObject _lastColliderPlayer;
 
         [SerializeField] private GameObject floatingMessagePrefab;
-
 
         private void Start()
         {
@@ -29,44 +30,53 @@ namespace Map.Obstacle
             rbBreakEffect = GetComponentsInChildren<Rigidbody2D>();
             breakEffectPrefab = Resources.Load<ParticleSystem>("Prefabs/explosion");
             currentHealth = maxHealth;
-            Transform firstChild = gameObject.transform.Find("ObstacleHealthBar(Clone)");
-            _obstacleHealthBar = firstChild.transform.Find("FullHealth");
+            
+            // Шукаємо полосу хп
+            Transform healthBarParent = transform.Find("ObstacleHealthBar(Clone)");
+            if (healthBarParent != null)
+            {
+                _obstacleHealthBar = healthBarParent.Find("FullHealth");
+            }
         }
 
         private void Update()
         {
-            float percent = currentHealth / maxHealth;
-            _obstacleHealthBar.localScale = new Vector3(percent, 1f, 1f);
+            // Обновлюємо полосу хп
+            if (_obstacleHealthBar != null)
+            {
+                float percent = currentHealth / maxHealth;
+                _obstacleHealthBar.localScale = new Vector3(percent, 1f, 1f);
+            }
         }
 
         void OnCollisionEnter2D(Collision2D collision)
         {
+            // Наносимо урон в залежності від швидкості героя
             if (collision.gameObject.CompareTag("Player"))
             {
                 _lastColliderPlayer = collision.gameObject;
 
                 float playerSpeed = collision.relativeVelocity.magnitude;
-                float damage;
-
-                if (playerSpeed >= speedThresholdForMaxDamage)
-                {
-                    damage = maxHealth;
-                }
-                else if (playerSpeed <= 0.1f)
-                {
-                    damage = minDamage;
-                }
-                else
-                {
-                    damage = playerSpeed * speedDamageMultiplier;
-                }
-
+                float damage = CalculateDamage(playerSpeed);
                 TakeDamage(damage);
             }
         }
 
+        private float CalculateDamage(float playerSpeed)
+        {
+            // розраховуємо урон 
+            if (playerSpeed >= speedThresholdForMaxDamage)
+                return maxHealth;
+            
+            if (playerSpeed <= 0.1f)
+                return minDamage;
+            
+            return playerSpeed * speedDamageMultiplier;
+        }
+
         private void OnCollisionStay2D(Collision2D collision)
         {
+            // Наносимо мінімальний урон якщо гравець стоїть в об'єкті
             if (collision.gameObject.CompareTag("Player"))
             {
                 _lastColliderPlayer = collision.gameObject;
@@ -78,12 +88,14 @@ namespace Map.Obstacle
         {
             currentHealth -= damage;
             int roundDamage = Mathf.RoundToInt(damage);
+            
+            // Виводимо урон нанесений гравцем
             if (roundDamage > 1)
             {
                 ShowFloatingMessage(roundDamage.ToString());
             }
 
-
+            // Знищуємо об'єкт якщо здоровя упало
             if (currentHealth <= 0)
             {
                 if (_lastColliderPlayer != null)
@@ -99,43 +111,75 @@ namespace Map.Obstacle
 
         private void ShowFloatingMessage(string message)
         {
-            Vector3 spawnPos = transform != null ? transform.position : transform.position + Vector3.up * 1.2f;
-
+            // Спавнимо нанесений текст кількості завданої шкоди
+            Vector3 spawnPos = transform.position + Vector3.up * 1.2f;
             GameObject textObj = Instantiate(floatingMessagePrefab, spawnPos, Quaternion.identity);
             textObj.GetComponent<FloatingMassega>().SetMessage(message);
         }
 
         private void DestroyObstacle(GameObject player)
         {
+            // Знищуємо об'єкт гравцем
             Vector2 direction = (transform.position - player.transform.position).normalized;
-
-            ParticleSystem effect = Instantiate(breakEffectPrefab, transform.position, Quaternion.identity);
-            _explosionCactusFragment.Explosion();
-            var shape = effect.shape;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            shape.rotation = new Vector3(0, 0, angle);
-            shape.arc = 90;
-            effect.Play();
-            Destroy(gameObject);
-            BreakEffect();
+            SpawnDeathEffects(direction);
+            NotifySpawnerAndDestroy();
         }
 
         private void Death()
         {
-            ParticleSystem effect = Instantiate(breakEffectPrefab, transform.position, Quaternion.identity);
-            _explosionCactusFragment.Explosion();
+            // Знищуємо об'єкт 
+            SpawnDeathEffects(Vector2.zero);
+            NotifySpawnerAndDestroy();
+        }
+
+        private void SpawnDeathEffects(Vector2 direction)
+        {
+            // Спавнимо ефект смерті і розльоту частиць 
+            Vector3 deathPosition = transform.position;
+            ParticleSystem effect = Instantiate(breakEffectPrefab, deathPosition, Quaternion.identity);
+            
+            if (_explosionCactusFragment != null)
+            {
+                _explosionCactusFragment.Explosion();
+            }
+
+            if (direction != Vector2.zero)
+            {
+                var shape = effect.shape;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                shape.rotation = new Vector3(0, 0, angle);
+                shape.arc = 90;
+            }
+            
             effect.Play();
-            Destroy(gameObject);
             BreakEffect();
+        }
+
+        private void NotifySpawnerAndDestroy()
+        {
+            // Повідомляємо спавнер про знищення обєкта
+            if (spawner != null && zone != null)
+            {
+                spawner.OnObjectDestroyed(gameObject, zone);
+            }
+            Destroy(gameObject);
         }
 
         private void BreakEffect()
         {
-            Instantiate(breakEffect, transform.position, Quaternion.identity);
+            // Задаємо рандомний напрямок частицям
+            if (breakEffect != null)
+            {
+                Instantiate(breakEffect, transform.position, Quaternion.identity);
+            }
+            
             foreach (Rigidbody2D rb in rbBreakEffect)
             {
-                Vector2 rand = new Vector2(Random.Range(-3, 4555555), Random.Range(0, 455555555555));
-                rb.AddForce(rand, ForceMode2D.Impulse);
+                if (rb != null)
+                {
+                    Vector2 rand = new Vector2(Random.Range(-3, 3), Random.Range(0, 5));
+                    rb.AddForce(rand, ForceMode2D.Impulse);
+                }
             }
         }
     }

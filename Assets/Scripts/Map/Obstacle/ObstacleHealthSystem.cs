@@ -11,6 +11,7 @@ namespace Map.Obstacle
     
         private void Awake()
         {
+            // Створюємо полосу здоров'я над обєктом
             _healthBarPrefab = Resources.Load<GameObject>("Prefabs/ObstacleHealthBar");
             _healthBarPrefab.transform.localScale = scale;
 

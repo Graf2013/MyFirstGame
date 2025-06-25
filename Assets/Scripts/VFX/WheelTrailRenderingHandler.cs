@@ -5,18 +5,18 @@ namespace VFX
 {
     class WheelTrailRenderingHandler : MonoBehaviour
     {
-        private PlayerController _playerController;
+        private CarController _carController;
         private TrailRenderer _trailRenderer;
 
         private void Awake()
         {
-            _playerController = GetComponentInParent<PlayerController>();
-
+            _carController = GetComponentInParent<CarController>();
             _trailRenderer = GetComponent<TrailRenderer>();
         }
         private void Update()
         {
-            _trailRenderer.emitting = _playerController.IsDrifting;
+            //Якщо IsDrifting = true включаємо малювання сліду
+            _trailRenderer.emitting = _carController.IsDrifting;
         }
     }
 }

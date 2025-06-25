@@ -35,6 +35,7 @@ namespace Player
 
         private void FixedUpdate()
         {
+            // Повертаємо точку пострілу в залежності від джойстика
             float targetAngle = Mathf.Atan2(_attackDirection.y, _attackDirection.x) * Mathf.Rad2Deg - 90f;
             float currentAngle = transform.eulerAngles.z;
             float angle = Mathf.MoveTowardsAngle(currentAngle, targetAngle,rotationSpeed * Time.fixedDeltaTime);

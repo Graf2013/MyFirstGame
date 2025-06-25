@@ -6,13 +6,14 @@ namespace VFX
     {
         [SerializeField] private GameObject[] fragments;
         [SerializeField] private float forceVectorX, forceVectorY;
-        Vector2 _rand;
-        void Start()
+        private Vector2 _rand;
+        private void Start()
         {
             Explosion();
         }
         public void Explosion()
         {
+            //Для кожного фрагмента генеруємо випадковий вектор переміщення якому далі задаємо силу
             foreach (var fragment in fragments)
             {
                 _rand = new Vector2(Random.Range(-forceVectorX, forceVectorX), Random.Range(-forceVectorY, forceVectorY));

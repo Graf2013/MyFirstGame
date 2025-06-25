@@ -6,16 +6,15 @@ namespace Player.PlayerUI
     public class HealthBarUI : MonoBehaviour
     {
         [SerializeField] private Image healthBar;
-        [SerializeField] private float maxHealth;
-        [SerializeField] public float currentHealth;
+        [SerializeField] private CarController carController;
         void Start()
         {
-            currentHealth = maxHealth;
+            carController.currentHealth = carController.maxHealth;
         }
 
         void Update()
         {
-            healthBar.fillAmount = currentHealth / maxHealth;
+            healthBar.fillAmount = carController.currentHealth / carController.maxHealth;
         }
     }
 }

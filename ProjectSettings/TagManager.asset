@@ -8,6 +8,7 @@ TagManager:
   - UI
   - Enemy
   - Bullet
+  - Vehicle
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - UI
   - Shadow
   - EnemyAi1
-  - 
-  - 
+  - Enemy
+  - EnemyMelee
   - 
   - 
   - 
@@ -56,6 +57,15 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemy
+    uniqueID: 382570693
+    locked: 0
+  - name: UI
+    uniqueID: 2676017703
+    locked: 0
+  - name: PlayerUI
+    uniqueID: 2412397225
     locked: 0
   m_RenderingLayers:
   - Default

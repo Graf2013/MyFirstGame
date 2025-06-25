@@ -99,7 +99,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -372,7 +372,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      JoystickPack_0: 4192339170159034981
+      JoystickPack_1: -4893191653376187550
+      JoystickPack_2: 7487603532051190412
+      JoystickPack_3: 3149824789741008532
+      JoystickPack_4: -883836197181215700
+      JoystickPack_5: -461130466877612760
+      JoystickPack_6: 1829580619866515994
+      JoystickPack_7: -3803294551476718955
+      JoystickPack_8: -6106262812525596410
+      JoystickPack_9: -2146722845951549273
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

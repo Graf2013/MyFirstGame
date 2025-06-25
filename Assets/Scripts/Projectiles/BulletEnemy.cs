@@ -15,9 +15,10 @@ namespace Projectiles
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            // Наносимо шкоду при влучанні в героя
             if (other.CompareTag("Player"))
             {
-                var playerHealth = other.GetComponent<PlayerController>();
+                var playerHealth = other.GetComponent<CarController>();
                 if (playerHealth != null)
                 {
                     playerHealth.TakeDamage(damage);

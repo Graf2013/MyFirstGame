@@ -11,12 +11,14 @@ namespace Projectiles
     
         private void Update()
         {
+            //Рухаємо кулю вперед відносно її повороту і знищуємо після 10 секунд
             rb.linearVelocity = transform.up * 20;
             Destroy(gameObject, 10f);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            // якщо куля влучає в об'єкт який має компонент  Obstacle , EnemyHealthSystem викликаємо в цього об'єкта метод TakeDamage 
             var damageable = collision.GetComponent<Obstacle>();
             if (damageable != null)
             {

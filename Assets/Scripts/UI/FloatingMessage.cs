@@ -20,12 +20,14 @@ namespace UI
     
         void Start()
         {
+            //Задаємо випадкове зміщення вліво вправо і у верх, після чого знищуємо об'єкт
             _rb.linearVelocity = new Vector2(Random.Range(-initialXVelocityRange, initialXVelocityRange), initialYVelocity);
             Destroy(gameObject, lifeTime);
         }
 
         public void SetMessage(string message)
         {
+            //Встановлює значення урона для виведення
             _damageValue.SetText(message);
         }
     }

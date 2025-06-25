@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7160688006843439119}
   - component: {fileID: 3434785344711628967}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FullHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1618949593
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 2827406753115389022, guid: 85c6cf99dc2798c49ace051d01a22008, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1043307159630887265}
   - component: {fileID: 8008045156057684272}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ObstacleHealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,8 +161,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1618949593
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 5980426374881594011, guid: 548006f6046eede49911f8bf3db03ad2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
