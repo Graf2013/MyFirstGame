@@ -11,14 +11,12 @@ namespace Enemy.FSM.FsmStates
         private readonly float _moveSpeed;
         private readonly float _attackRange;
         private readonly Collider2D _wanderZone;
-
-        // Константи
+        
         private const float MIN_DISTANCE_TO_POINT = 1f;
         private const float MIN_RANDOM_TIME = 0.8f;
         private const float MAX_RANDOM_TIME = 2.5f;
         private const int MAX_POINT_ATTEMPTS = 10;
-
-        // Змінні стану
+        
         private float _timer;
         private float _nextPointTime;
         private Vector2 _targetPoint;

@@ -99,7 +99,7 @@ namespace Enemy
             transform.position = _originalPosition;
             currentHealth = maxHealth;
         
-            // Скидання стану FSM
+            
             var ai = GetComponent<EnemyAi2>();
             if (ai != null) ai.ResetState();
         }

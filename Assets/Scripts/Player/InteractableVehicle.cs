@@ -1,57 +1,50 @@
+using Player.PlayerInterface;
+using Player.PlayerUI;
 using UnityEngine;
 
 namespace Player
 {
     public class InteractableVehicle : MonoBehaviour
     {
-        [SerializeField] private CarController vehicleController;
+        [SerializeField] private MonoBehaviour controller;
+        private IVehicleController  _vehicleController;
         private VehicleManager _vehicleManager;
+        [SerializeField] PlayerUiManager  playerUiManager;
 
         private void Start()
         {
+            // Приводимо збережений MonoBehaviour до інтерфейсу IVehicleController
+            _vehicleController = controller as IVehicleController;
+            // Знаходимо об'єкт VehicleManager у сцені, щоб передавати йому команди
             _vehicleManager = FindFirstObjectByType<VehicleManager>();
-            if (_vehicleManager == null)
-            {
-                Debug.LogError($"VehicleManager не знайдено у сцені для {gameObject.name}!");
-            }
-
-            if (vehicleController == null)
-            {
-                Debug.LogError($"PlayerController не прив’язаний до InteractableVehicle на {gameObject.name}!");
-            }
-            else
-            {
-                vehicleController.enabled = false;
-            }
+            
+            playerUiManager = FindFirstObjectByType<PlayerUiManager>();
         }
 
+        // Метод викликається, коли гравець сідає в цей транспорт
         public void EnterVehicle(PlayerControllerHuman player)
         {
-            if (_vehicleManager != null)
-            {
-                _vehicleManager.EnterVehicle(this, player);
-            }
-            else
-            {
-                Debug.LogError($"EnterVehicle не виконано: VehicleManager не ініціалізований для {gameObject.name}!");
-            }
+            _vehicleManager.EnterVehicle(this, player);
+            var uiProvider = controller as IUIProvider;
+            playerUiManager.SetUIProvider(uiProvider);
+
         }
 
+        // Метод викликається, коли гравець виходить з цього транспорту
         public void ExitVehicle(PlayerControllerHuman player)
         {
-            if (_vehicleManager != null)
+            _vehicleManager.ExitVehicle(player);
+            var playerProvider = player.GetComponentInChildren<IUIProvider>();
+            if (playerProvider != null)
             {
-                _vehicleManager.ExitVehicle(player);
-            }
-            else
-            {
-                Debug.LogError($"ExitVehicle не виконано: VehicleManager не ініціалізований для {gameObject.name}!");
+                playerUiManager.SetUIProvider(playerProvider);
             }
         }
 
-        public CarController GetVehicleController()
+        // Повертає інтерфейс контролера транспорту, щоб VehicleManager міг вмикати чи вимикати його
+        public IVehicleController GetVehicleController()
         {
-            return vehicleController;
+            return _vehicleController;
         }
     }
 }

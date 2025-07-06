@@ -4,7 +4,7 @@ namespace GameMamager
 {
     public class DestroyObject : MonoBehaviour
     {
-        void Update()
+        void Start()
         {
             GameObject.Destroy(gameObject, 5);
         }

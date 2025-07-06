@@ -52,7 +52,7 @@ namespace Map.Obstacle
         void OnCollisionEnter2D(Collision2D collision)
         {
             // Наносимо урон в залежності від швидкості героя
-            if (collision.gameObject.CompareTag("Player"))
+            if (collision.gameObject.CompareTag("Vehicle"))
             {
                 _lastColliderPlayer = collision.gameObject;
 
@@ -77,7 +77,7 @@ namespace Map.Obstacle
         private void OnCollisionStay2D(Collision2D collision)
         {
             // Наносимо мінімальний урон якщо гравець стоїть в об'єкті
-            if (collision.gameObject.CompareTag("Player"))
+            if (collision.gameObject.CompareTag("Vehicle"))
             {
                 _lastColliderPlayer = collision.gameObject;
                 TakeDamage(minDamage * Time.deltaTime);

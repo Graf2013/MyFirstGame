@@ -1,3 +1,4 @@
+using Player.PlayerWeapon;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,46 +10,34 @@ namespace Player
         [SerializeField] private GameObject enterExitButton;
         [SerializeField] private TextMeshProUGUI buttonText;
         
+        //Посилання на транспорт яким володіє гравець
         public InteractableVehicle currentVehicle;
+        //Перевірка чи гравець в машині
         public bool isInVehicle;
         
+        //Посилання на гравця
         private PlayerControllerHuman _player;
         private InputAction _interactAction;
-
-        // Константи для UI
-        private const string ENTER_TEXT = "Вхід";
-        private const string EXIT_TEXT = "Вихід";
-        private static readonly Vector3 ExitOffset = Vector3.up * 1.5f;
+        
+        private readonly  string _enterText = "Вхід";
+        private readonly  string _exitText = "Вихід";
+        
+        
+        
 
         private void Start()
         {
-            InitializeComponents();
-            InitializeUI();
-        }
-
-        private void InitializeComponents()
-        {
             _player = FindFirstObjectByType<PlayerControllerHuman>();
             _interactAction = InputSystem.actions.FindAction("Interact");
-            
-            if (_player == null)
-                Debug.LogError("PlayerControllerHuman не знайдено!");
-            if (_interactAction == null)
-                Debug.LogError("Interact action не знайдено!");
+            enterExitButton.SetActive(false);
         }
-
-        private void InitializeUI()
-        {
-            if (enterExitButton != null)
-            {
-                enterExitButton.SetActive(false);
-            }
-        }
-
+        
         private void Update()
         {
+            //Якщо кнопка не нажата нічого не робимо
             if (!_interactAction.triggered) return;
 
+            //Якщо кнопка нажата і герой не в транспорті заходимо в транспорт інакше виходимо
             if (currentVehicle != null && !isInVehicle)
             {
                 currentVehicle.EnterVehicle(_player);
@@ -59,14 +48,17 @@ namespace Player
             }
         }
 
+        //Метод викликається коли гравець підходить до транспорту 
         public void SetInteractableVehicle(InteractableVehicle vehicle)
         {
             currentVehicle = vehicle;
             UpdateUI();
         }
 
+        //Метод для показу кнопки
         private void UpdateUI()
         {
+            //Перевіряє коли показувати кнопку 
             bool showButton = currentVehicle != null && !isInVehicle;
             
             if (enterExitButton != null)
@@ -76,12 +68,14 @@ namespace Player
             
             if (buttonText != null)
             {
-                buttonText.text = isInVehicle ? EXIT_TEXT : ENTER_TEXT;
+                buttonText.text = isInVehicle ? _exitText : _enterText;
             }
         }
 
+        // Метод викликається коли гравець сідає в транспорт
         public void EnterVehicle(InteractableVehicle vehicle, PlayerControllerHuman player)
         {
+            
             if (vehicle == null || player == null) return;
 
             isInVehicle = true;
@@ -89,18 +83,23 @@ namespace Player
             
             // Деактивуємо контроль гравця та активуємо контроль машини
             player.DisableControls();
-            var vehicleController = vehicle.GetVehicleController();
-            if (vehicleController != null)
-            {
-                vehicleController.enabled = true;
-            }
             
+            var controller = vehicle.GetVehicleController();
+            controller.Enable();
+        
+            if (controller is CarController car)
+            {
+                car.SetDriver(player);
+            }
             // Переміщуємо гравця в позицію машини
             player.transform.position = vehicle.transform.position;
             
             UpdateUI();
+
+            vehicle.GetComponent<WeaponHandler>().isControlledByPlayer = true;
         }
 
+        //Метод викликається коли гравець виходить з транспорту 
         public void ExitVehicle(PlayerControllerHuman player)
         {
             if (player == null || currentVehicle == null) return;
@@ -108,18 +107,40 @@ namespace Player
             isInVehicle = false;
             
             // Активуємо контроль гравця та деактивуємо контроль машини
-            var vehicleController = currentVehicle.GetVehicleController();
-            if (vehicleController != null)
-            {
-                vehicleController.enabled = false;
-            }
+            var controller = currentVehicle.GetVehicleController();
+            controller.Disable();
             
             // Переміщуємо гравця поруч з машиною
-            player.transform.position = currentVehicle.transform.position + ExitOffset;
+            player.transform.position = currentVehicle.transform.position + Vector3.left;
             player.EnableControls();
 
+            currentVehicle.GetComponent<WeaponHandler>().isControlledByPlayer = false;
             currentVehicle = null;
             UpdateUI();
+            
         }
+        
+        public bool IsInVehicle()
+        {
+            return isInVehicle && currentVehicle != null;
+        }
+
+        public InteractableVehicle GetCurrentVehicle()
+        {
+            return currentVehicle;
+        }
+        
+        public void OnEnterExitButtonClicked()
+        {
+            if (currentVehicle != null && !isInVehicle)
+            {
+                currentVehicle.EnterVehicle(_player);
+            }
+            else if (isInVehicle && currentVehicle != null)
+            {
+                currentVehicle.ExitVehicle(_player);
+            }
+        }
+
     }
 }

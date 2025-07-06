@@ -7,6 +7,7 @@ namespace Player
     {
         [SerializeField] private GameObject bullet;
 
+        [SerializeField] CarController carController;
         private Vector2 _attackDirection;
         [SerializeField] private InputAction attackAction; 
         [SerializeField] private float rotationSpeed;

@@ -1,11 +1,18 @@
+using Player.PlayerInterface;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Player
 {
-    public class PlayerHealth : MonoBehaviour
+    public class PlayerHealth : MonoBehaviour, IUIProvider, IDamageable
     {
-        [SerializeField] private float maxHealth = 100f; // Максимальне здоров’я героя
+        [SerializeField] private float maxHealth = 100f; 
         private float currentHealth;
+        
+        public float GetCurrentHealth() => currentHealth;
+        public float GetMaxHealth() => maxHealth;
+        public float GetCurrentEnergy() => currentHealth;
+        public float GetMaxEnergy() => maxHealth;
 
         private void Start()
         {
@@ -25,22 +32,10 @@ namespace Player
 
         private void Die()
         {
-            // Логіка смерті героя
             Debug.Log($"{gameObject.name} помер!");
-            gameObject.SetActive(false); // Деактивація героя
-            // Тут можна додати виклик Game Over, рестарт рівня тощо
+            SceneManager.LoadScene("MainMenu");
+            gameObject.SetActive(false);
         }
-
-        // Додатковий метод для отримання поточного здоров’я (наприклад, для UI)
-        public float GetCurrentHealth()
-        {
-            return currentHealth;
-        }
-
-        // Додатковий метод для отримання максимального здоров’я
-        public float GetMaxHealth()
-        {
-            return maxHealth;
-        }
+        
     }
 }

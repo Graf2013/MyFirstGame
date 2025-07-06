@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 2036860966575247230}
+  explosionBullet: {fileID: 5936772559470593867, guid: df75a5e26ce3e254685d08c4c827adab, type: 3}
 --- !u!58 &8856170976135662182
 CircleCollider2D:
   m_ObjectHideFlags: 0
